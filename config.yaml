@@ -1,0 +1,8 @@
+﻿kafka:
+  enabled: true
+  brokers:
+    - "kafka1:9092"
+    - "kafka2:9092"
+  client_id: "go-rest-template"
+  group_id: "go-rest-template-consumers"
+  topic_prefix: "myapp."

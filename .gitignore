@@ -1,0 +1,96 @@
+﻿# =========================
+# Go build artifacts
+# =========================
+
+# Binaries (common patterns)
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+
+# go build / go install outputs
+/bin/
+/out/
+/dist/
+/build/
+
+# go work / module cache artifacts (not usually present in repo)
+*.a
+
+# =========================
+# Editor / IDE / OS cruft
+# =========================
+
+# VS Code
+.vscode/
+
+# JetBrains / GoLand
+.idea/
+*.iml
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# =========================
+# Logs & runtime junk
+# =========================
+
+*.log
+logs/
+tmp/
+*.tmp
+
+# =========================
+# Coverage & profiling
+# =========================
+
+*.out
+coverage.*
+profile.*
+cpu.prof
+mem.prof
+
+# =========================
+# Config / environment files
+# (commit only "example" versions)
+# =========================
+
+.env
+.env.*.local
+*.local.yaml
+*.local.yml
+config.local.json
+
+# If you have a config file pattern:
+# config/appsettings.local.json
+# config/*.local.json
+
+# =========================
+# Docker / Compose overrides
+# =========================
+
+docker-compose.override.yml
+.docker/
+.dockerignore.local
+
+# =========================
+# Ent / Atlas / Migrations
+# =========================
+
+# DO NOT ignore ent/ generated code - it should be committed.
+# Just ignore temporary or backup files if any appear.
+
+# Example, if you ever create these:
+ent/gen/
+ent/tmp/
+ent/*.bak
+
+# Atlas state/cache (if you use cloud or local state files)
+atlas.hcl.backup
+atlas.sum
