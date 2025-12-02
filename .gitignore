@@ -94,3 +94,4 @@ ent/*.bak
 # Atlas state/cache (if you use cloud or local state files)
 atlas.hcl.backup
 atlas.sum
+/main

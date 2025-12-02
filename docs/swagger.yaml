@@ -1,0 +1,239 @@
+basePath: /api/v1
+definitions:
+  apidocs.ErrorEnvelope:
+    properties:
+      code:
+        example: not_found
+        type: string
+      details: {}
+      message:
+        example: The requested resource was not found.
+        type: string
+      traceId:
+        type: string
+    type: object
+  apidocs.HealthResponse:
+    properties:
+      db:
+        example: ok
+        type: string
+      redis:
+        example: ok
+        type: string
+      status:
+        example: ok
+        type: string
+      traceId:
+        type: string
+    type: object
+  apidocs.UserItemResponse:
+    properties:
+      data:
+        $ref: '#/definitions/apidocs.UserResponse'
+      traceId:
+        type: string
+    type: object
+  apidocs.UserResponse:
+    properties:
+      email:
+        example: jane@example.com
+        type: string
+      id:
+        example: 1
+        type: integer
+      name:
+        example: Jane Doe
+        type: string
+    type: object
+  apidocs.UsersListResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/apidocs.UserResponse'
+        type: array
+      traceId:
+        type: string
+    type: object
+  internal_http_handlers_user.CreateUserRequest:
+    properties:
+      email:
+        type: string
+      name:
+        maxLength: 100
+        minLength: 2
+        type: string
+    required:
+    - email
+    - name
+    type: object
+  internal_http_handlers_user.UpdateUserRequest:
+    properties:
+      name:
+        maxLength: 100
+        minLength: 2
+        type: string
+    type: object
+info:
+  contact:
+    email: platform@example.com
+    name: Platform Team
+  description: Go starter API with chi, Ent, Redis, Kafka (Watermill), and OpenTelemetry.
+  title: Kabsa API
+  version: "1.0"
+paths:
+  /health:
+    get:
+      description: Returns readiness of dependencies
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/apidocs.HealthResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/apidocs.ErrorEnvelope'
+      summary: Health check
+      tags:
+      - health
+  /users:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/apidocs.UsersListResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/apidocs.ErrorEnvelope'
+      summary: List users
+      tags:
+      - users
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Create payload
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/internal_http_handlers_user.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/apidocs.UserItemResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/apidocs.ErrorEnvelope'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/apidocs.ErrorEnvelope'
+      summary: Create user
+      tags:
+      - users
+  /users/{id}:
+    delete:
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/apidocs.ErrorEnvelope'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/apidocs.ErrorEnvelope'
+      summary: Delete user
+      tags:
+      - users
+    get:
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/apidocs.UserItemResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/apidocs.ErrorEnvelope'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/apidocs.ErrorEnvelope'
+      summary: Get user by ID
+      tags:
+      - users
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update payload
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/internal_http_handlers_user.UpdateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/apidocs.UserItemResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/apidocs.ErrorEnvelope'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/apidocs.ErrorEnvelope'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/apidocs.ErrorEnvelope'
+      summary: Update user
+      tags:
+      - users
+securityDefinitions:
+  BearerAuth:
+    description: Type "Bearer {token}" to authenticate
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

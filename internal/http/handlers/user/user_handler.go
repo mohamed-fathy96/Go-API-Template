@@ -1,13 +1,14 @@
-﻿package user
+package user
 
 import (
 	"encoding/json"
-	"github.com/go-chi/chi/v5"
 	appuser "kabsa/internal/app/user"
 	"kabsa/internal/http/responses"
 	"kabsa/internal/logging"
 	"net/http"
 	"strconv"
+
+	"github.com/go-chi/chi/v5"
 )
 
 type Handler struct {
@@ -22,7 +23,14 @@ func NewHandler(service appuser.Service, logger logging.Logger) *Handler {
 	}
 }
 
-// List GET /users
+// List godoc
+//
+//	@Summary	List users
+//	@Tags		users
+//	@Produce	json
+//	@Success	200	{object}	apidocs.UsersListResponse
+//	@Failure	500	{object}	apidocs.ErrorEnvelope
+//	@Router		/users [get]
 func (h *Handler) List(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
@@ -39,7 +47,17 @@ func (h *Handler) List(w http.ResponseWriter, r *http.Request) {
 	responses.WriteJSON(w, http.StatusOK, users)
 }
 
-// Create POST /users
+// Create godoc
+//
+//	@Summary	Create user
+//	@Tags		users
+//	@Accept		json
+//	@Produce	json
+//	@Param		body	body		user.CreateUserRequest	true	"Create payload"
+//	@Success	201		{object}	apidocs.UserItemResponse
+//	@Failure	400		{object}	apidocs.ErrorEnvelope
+//	@Failure	500		{object}	apidocs.ErrorEnvelope
+//	@Router		/users [post]
 func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
@@ -66,7 +84,16 @@ func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
 	responses.WriteJSON(w, http.StatusCreated, dto)
 }
 
-// GetByID GET /users/{id}
+// GetByID godoc
+//
+//	@Summary	Get user by ID
+//	@Tags		users
+//	@Produce	json
+//	@Param		id	path		int	true	"User ID"
+//	@Success	200	{object}	apidocs.UserItemResponse
+//	@Failure	404	{object}	apidocs.ErrorEnvelope
+//	@Failure	500	{object}	apidocs.ErrorEnvelope
+//	@Router		/users/{id} [get]
 func (h *Handler) GetByID(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	idStr := chi.URLParam(r, "id")
@@ -90,7 +117,19 @@ func (h *Handler) GetByID(w http.ResponseWriter, r *http.Request) {
 	responses.WriteJSON(w, http.StatusOK, dto)
 }
 
-// Update PUT /users/{id}
+// Update godoc
+//
+//	@Summary	Update user
+//	@Tags		users
+//	@Accept		json
+//	@Produce	json
+//	@Param		id		path		int								true	"User ID"
+//	@Param		body	body		user.UpdateUserRequest	true	"Update payload"
+//	@Success	200		{object}	apidocs.UserItemResponse
+//	@Failure	400		{object}	apidocs.ErrorEnvelope
+//	@Failure	404		{object}	apidocs.ErrorEnvelope
+//	@Failure	500		{object}	apidocs.ErrorEnvelope
+//	@Router		/users/{id} [put]
 func (h *Handler) Update(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	idStr := chi.URLParam(r, "id")
@@ -126,7 +165,16 @@ func (h *Handler) Update(w http.ResponseWriter, r *http.Request) {
 	responses.WriteJSON(w, http.StatusOK, dto)
 }
 
-// Delete DELETE /users/{id}
+// Delete godoc
+//
+//	@Summary	Delete user
+//	@Tags		users
+//	@Produce	json
+//	@Param		id	path		int		true	"User ID"
+//	@Success	204	{string}	string	"No Content"
+//	@Failure	404	{object}	apidocs.ErrorEnvelope
+//	@Failure	500	{object}	apidocs.ErrorEnvelope
+//	@Router		/users/{id} [delete]
 func (h *Handler) Delete(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	idStr := chi.URLParam(r, "id")

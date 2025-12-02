@@ -1,12 +1,14 @@
-﻿package router
+package router
 
 import (
-	"github.com/go-chi/chi/v5"
 	"kabsa/internal/http/handlers/health"
 	userhandler "kabsa/internal/http/handlers/user"
 	"kabsa/internal/http/responses"
 	"kabsa/internal/logging"
 	"net/http"
+
+	"github.com/go-chi/chi/v5"
+	httpSwagger "github.com/swaggo/http-swagger"
 )
 
 func NewRouter(
@@ -19,6 +21,7 @@ func NewRouter(
 
 	useBaseMiddlewares(r, logger, serviceName)
 
+	r.Get("/swagger/*", httpSwagger.Handler(httpSwagger.URL("/swagger/doc.json")))
 	r.Route("/api/v1", func(r chi.Router) {
 		// Health
 		r.Get("/health", healthHandler.Check)

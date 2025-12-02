@@ -1,10 +1,25 @@
-﻿package api
+// Package main Kabsa API.
+//
+//	@title						Kabsa API
+//	@version					1.0
+//	@description				Go starter API with chi, Ent, Redis, Kafka (Watermill), and OpenTelemetry.
+//
+//	@contact.name				Platform Team
+//	@contact.email				platform@example.com
+//
+//	@BasePath					/api/v1
+//
+//	@securityDefinitions.apikey	BearerAuth
+//	@in							header
+//	@name						Authorization
+//	@description				Type "Bearer {token}" to authenticate
+package main
 
 import (
 	"context"
 	"errors"
 	"fmt"
-	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
+	_ "kabsa/docs"
 	"kabsa/internal/app/user"
 	"kabsa/internal/cache"
 	"kabsa/internal/config"
@@ -22,9 +37,13 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
+
+	"github.com/joho/godotenv"
+	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 )
 
 func main() {
+	_ = godotenv.Load(".env")
 	// Top-level context with graceful shutdown on SIGINT/SIGTERM
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer stop()
